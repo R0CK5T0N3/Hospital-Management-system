@@ -1,0 +1,166 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <limits>
+
+using namespace std;
+
+// Define a structure to represent a Patient
+class Patient {
+private:
+    int patientID;
+    string name;
+    int age;
+    string gender;
+    string contactNumber;
+    string medicalReport;
+
+public:
+    // Constructor to initialize patient details
+    Patient(int id, string name, int age, string gender, string contactNumber, string medicalReport)
+        : patientID(id), name(name), age(age), gender(gender), contactNumber(contactNumber), medicalReport(medicalReport) {}
+
+    // Getter functions
+    int getPatientID() const { return patientID; }
+    string getName() const { return name; }
+    int getAge() const { return age; }
+    string getGender() const { return gender; }
+    string getContactNumber() const { return contactNumber; }
+    string getMedicalReport() const { return medicalReport; }
+
+    // Function to display patient details
+    void displayPatientDetails() const {
+        cout << "\nPatient ID: " << patientID
+             << "\nName: " << name
+             << "\nAge: " << age
+             << "\nGender: " << gender
+             << "\nContact: " << contactNumber
+             << "\nMedical Report: " << medicalReport << endl;
+    }
+};
+
+// Class to represent the Hospital Management System
+class HospitalManagementSystem {
+private:
+    vector<Patient> patients;  // List of patients
+
+public:
+    // Function to add a new patient
+    void addPatient() {
+        int id, age;
+        string name, gender, contact, report;
+
+        cout << "Enter Patient ID: ";
+        cin >> id;
+        cin.ignore();  // To ignore the newline character left in the buffer
+        cout << "Enter Name: ";
+        getline(cin, name);
+        cout << "Enter Age: ";
+        cin >> age;
+        cin.ignore();
+        cout << "Enter Gender: ";
+        getline(cin, gender);
+        cout << "Enter Contact Number: ";
+        getline(cin, contact);
+        cout << "Enter Medical Report: ";
+        getline(cin, report);
+
+        // Create a new patient and add it to the list
+        Patient newPatient(id, name, age, gender, contact, report);
+        patients.push_back(newPatient);
+
+        cout << "\nPatient added successfully!" << endl;
+    }
+
+    // Function to search for a patient by their ID
+    void searchPatientByID() {
+        int searchID;
+        cout << "Enter Patient ID to search: ";
+        cin >> searchID;
+
+        bool found = false;
+        for (const auto& patient : patients) {
+            if (patient.getPatientID() == searchID) {
+                patient.displayPatientDetails();
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            cout << "Patient with ID " << searchID << " not found." << endl;
+        }
+    }
+
+    // Function to display all patient details
+    void displayAllPatients() {
+        if (patients.empty()) {
+            cout << "No patients available." << endl;
+        } else {
+            for (const auto& patient : patients) {
+                patient.displayPatientDetails();
+                cout << "---------------------------------" << endl;
+            }
+        }
+    }
+
+    // Function to remove a patient
+    void removePatient() {
+        int removeID;
+        cout << "Enter Patient ID to remove: ";
+        cin >> removeID;
+
+        bool found = false;
+        for (auto it = patients.begin(); it != patients.end(); ++it) {
+            if (it->getPatientID() == removeID) {
+                patients.erase(it);
+                cout << "Patient with ID " << removeID << " removed successfully!" << endl;
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            cout << "Patient with ID " << removeID << " not found." << endl;
+        }
+    }
+};
+
+int main() {
+    HospitalManagementSystem hms;
+    int choice;
+
+    while (true) {
+        cout << "\n----- Hospital Management System -----";
+        cout << "\n1. Add Patient";
+        cout << "\n2. View All Patients";
+        cout << "\n3. Search Patient by ID";
+        cout << "\n4. Remove Patient";
+        cout << "\n5. Exit";
+        cout << "\n--------------------------------------";
+        cout << "\nEnter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            hms.addPatient();
+            break;
+        case 2:
+            hms.displayAllPatients();
+            break;
+        case 3:
+            hms.searchPatientByID();
+            break;
+        case 4:
+            hms.removePatient();
+            break;
+        case 5:
+            cout << "Exiting Hospital Management System...\n";
+            return 0;
+        default:
+            cout << "Invalid choice. Please try again.\n";
+        }
+    }
+
+    return 0;
+}
